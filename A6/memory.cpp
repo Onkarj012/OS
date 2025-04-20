@@ -1,3 +1,6 @@
+// This program simulates different memory allocation strategies.
+// It includes First Fit, Best Fit, Worst Fit, and Next Fit algorithms.
+
 #include <iostream>
 #include <iomanip>
 #include <stdexcept>
@@ -5,6 +8,7 @@ using namespace std;
 
 #define MAX 100
 
+// Function to display the allocation of processes to memory blocks
 void displayAllocation(int processSize[], int allocation[], int blockSize[], int n, int m)
 {
     cout << "\n---------------------------------------------------------------\n";
@@ -34,6 +38,7 @@ void displayAllocation(int processSize[], int allocation[], int blockSize[], int
     cout << "---------------------------------------------------------------\n";
 }
 
+// Function to perform First Fit memory allocation
 void firstFit(int blockSize[], int m, int processSize[], int n)
 {
     int allocation[n];
@@ -53,6 +58,7 @@ void firstFit(int blockSize[], int m, int processSize[], int n)
     displayAllocation(processSize, allocation, blockSize, n, m);
 }
 
+// Function to perform Best Fit memory allocation
 void bestFit(int blockSize[], int m, int processSize[], int n)
 {
     int allocation[n];
@@ -77,6 +83,7 @@ void bestFit(int blockSize[], int m, int processSize[], int n)
     displayAllocation(processSize, allocation, blockSize, n, m);
 }
 
+// Function to perform Worst Fit memory allocation
 void worstFit(int blockSize[], int m, int processSize[], int n)
 {
     int allocation[n];
@@ -101,6 +108,7 @@ void worstFit(int blockSize[], int m, int processSize[], int n)
     displayAllocation(processSize, allocation, blockSize, n, m);
 }
 
+// Function to perform Next Fit memory allocation
 void nextFit(int blockSize[], int m, int processSize[], int n)
 {
     int allocation[n];
@@ -132,6 +140,7 @@ void nextFit(int blockSize[], int m, int processSize[], int n)
     displayAllocation(processSize, allocation, blockSize, n, m);
 }
 
+// Entry point of the program
 int main()
 {
     int m, n, choice;

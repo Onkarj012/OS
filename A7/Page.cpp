@@ -1,3 +1,6 @@
+// This program simulates different page replacement algorithms.
+// It includes FIFO, LRU, and Optimal page replacement strategies.
+
 #include <iostream>
 #include <queue>
 #include <unordered_set>
@@ -5,11 +8,12 @@
 #include <climits>
 using namespace std;
 
+// Function to simulate FIFO page replacement
 int FIFO(int pages[], int n, int capacity)
 {
-    unordered_set<int> s;
-    queue<int> indexes;
-    int page_faults = 0;
+    unordered_set<int> s; // Set to store current pages in memory
+    queue<int> indexes;   // Queue to track the order of pages
+    int page_faults = 0;  // Count of page faults
 
     cout << "\n--- FIFO Page Replacement ---\n";
     for (int i = 0; i < n; i++)
@@ -51,11 +55,12 @@ int FIFO(int pages[], int n, int capacity)
     return page_faults;
 }
 
+// Function to simulate LRU page replacement
 int LRU(int pages[], int n, int capacity)
 {
-    unordered_set<int> s;
-    unordered_map<int, int> indexes;
-    int page_faults = 0;
+    unordered_set<int> s;            // Set to store current pages in memory
+    unordered_map<int, int> indexes; // Map to store the last used index of pages
+    int page_faults = 0;             // Count of page faults
 
     cout << "\n--- LRU Page Replacement ---\n";
     for (int i = 0; i < n; i++)
@@ -109,10 +114,11 @@ int LRU(int pages[], int n, int capacity)
     return page_faults;
 }
 
+// Function to simulate Optimal page replacement
 int optimal(int pages[], int n, int capacity)
 {
-    unordered_set<int> s;
-    int page_faults = 0;
+    unordered_set<int> s; // Set to store current pages in memory
+    int page_faults = 0;  // Count of page faults
 
     cout << "\n--- Optimal Page Replacement ---\n";
     for (int i = 0; i < n; i++)
@@ -177,6 +183,7 @@ int optimal(int pages[], int n, int capacity)
     return page_faults;
 }
 
+// Entry point of the program
 int main()
 {
     try

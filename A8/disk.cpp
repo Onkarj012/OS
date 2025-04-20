@@ -1,3 +1,6 @@
+// This program simulates different disk scheduling algorithms.
+// It includes FCFS, SSTF, SCAN, and C-SCAN disk scheduling strategies.
+
 #include <iostream>
 #include <algorithm>
 #include <vector>
@@ -11,13 +14,13 @@ using namespace std;
 // FCFS Disk Scheduling
 int FCFS(int requests[], int n, int head)
 {
-    int seek_time = 0;
-    int current = head;
+    int seek_time = 0;  // Total seek time
+    int current = head; // Current head position
 
     for (int i = 0; i < n; i++)
     {
-        seek_time += abs(requests[i] - current);
-        current = requests[i];
+        seek_time += abs(requests[i] - current); // Calculate seek time
+        current = requests[i];                   // Move head to the next request
     }
     return seek_time;
 }
@@ -25,8 +28,8 @@ int FCFS(int requests[], int n, int head)
 // SCAN Disk Scheduling (Elevator Algorithm)
 int Scan(int requests[], int n, int head)
 {
-    vector<int> left, right;
-    int seek_time = 0;
+    vector<int> left, right; // Vectors to store requests on left and right of head
+    int seek_time = 0;       // Total seek time
 
     for (int i = 0; i < n; i++)
     {
@@ -36,25 +39,25 @@ int Scan(int requests[], int n, int head)
             right.push_back(requests[i]);
     }
 
-    sort(left.begin(), left.end(), greater<int>());
-    sort(right.begin(), right.end());
+    sort(left.begin(), left.end(), greater<int>()); // Sort left in descending order
+    sort(right.begin(), right.end());               // Sort right in ascending order
 
     for (int i = 0; i < right.size(); i++)
     {
-        seek_time += abs(right[i] - head);
-        head = right[i];
+        seek_time += abs(right[i] - head); // Calculate seek time
+        head = right[i];                   // Move head to the next request
     }
 
     if (head != DISK_SIZE - 1)
     {
-        seek_time += abs((DISK_SIZE - 1) - head);
+        seek_time += abs((DISK_SIZE - 1) - head); // Move head to the end of the disk
         head = DISK_SIZE - 1;
     }
 
     for (int i = 0; i < left.size(); i++)
     {
-        seek_time += abs(head - left[i]);
-        head = left[i];
+        seek_time += abs(head - left[i]); // Calculate seek time
+        head = left[i];                   // Move head to the next request
     }
 
     return seek_time;
@@ -63,8 +66,8 @@ int Scan(int requests[], int n, int head)
 // C-SCAN Disk Scheduling (Circular SCAN)
 int CScan(int requests[], int n, int head)
 {
-    vector<int> left, right;
-    int seek_time = 0;
+    vector<int> left, right; // Vectors to store requests on left and right of head
+    int seek_time = 0;       // Total seek time
 
     for (int i = 0; i < n; i++)
     {
@@ -74,28 +77,28 @@ int CScan(int requests[], int n, int head)
             right.push_back(requests[i]);
     }
 
-    sort(left.begin(), left.end());
-    sort(right.begin(), right.end());
+    sort(left.begin(), left.end());   // Sort left in ascending order
+    sort(right.begin(), right.end()); // Sort right in ascending order
 
     for (int i = 0; i < right.size(); i++)
     {
-        seek_time += abs(right[i] - head);
-        head = right[i];
+        seek_time += abs(right[i] - head); // Calculate seek time
+        head = right[i];                   // Move head to the next request
     }
 
     if (head != DISK_SIZE - 1)
     {
-        seek_time += abs((DISK_SIZE - 1) - head);
+        seek_time += abs((DISK_SIZE - 1) - head); // Move head to the end of the disk
         head = DISK_SIZE - 1;
     }
 
-    seek_time += DISK_SIZE - 1;
+    seek_time += DISK_SIZE - 1; // Move head to the start of the disk
     head = 0;
 
     for (int i = 0; i < left.size(); i++)
     {
-        seek_time += abs(left[i] - head);
-        head = left[i];
+        seek_time += abs(left[i] - head); // Calculate seek time
+        head = left[i];                   // Move head to the next request
     }
 
     return seek_time;
@@ -106,17 +109,17 @@ int SSTF(int requests[], int n, int head)
 {
     try
     {
-        vector<int> remaining(requests, requests + n);
-        int seek_time = 0;
-        int current = head;
+        vector<int> remaining(requests, requests + n); // Vector to store remaining requests
+        int seek_time = 0;                             // Total seek time
+        int current = head;                            // Current head position
 
         while (!remaining.empty())
         {
-            int min_dist = INT_MAX, min_idx = -1;
+            int min_dist = INT_MAX, min_idx = -1; // Minimum distance and index
 
             for (int i = 0; i < remaining.size(); i++)
             {
-                int dist = abs(remaining[i] - current);
+                int dist = abs(remaining[i] - current); // Calculate distance
                 if (dist < min_dist)
                 {
                     min_dist = dist;
@@ -127,9 +130,9 @@ int SSTF(int requests[], int n, int head)
             if (min_idx == -1)
                 throw runtime_error("Error finding next closest request.");
 
-            seek_time += min_dist;
-            current = remaining[min_idx];
-            remaining.erase(remaining.begin() + min_idx);
+            seek_time += min_dist;                        // Add minimum distance to seek time
+            current = remaining[min_idx];                 // Move head to the next request
+            remaining.erase(remaining.begin() + min_idx); // Remove the request from the list
         }
 
         return seek_time;
@@ -141,6 +144,7 @@ int SSTF(int requests[], int n, int head)
     }
 }
 
+// Entry point of the program
 int main()
 {
     try

@@ -1,3 +1,6 @@
+// This program simulates a banking application without synchronization.
+// It demonstrates potential race conditions when multiple threads access shared data.
+
 #include <stdio.h>
 #include <pthread.h>
 #include <unistd.h>
@@ -9,7 +12,7 @@ int accountBalance = 1000; // Initial bank balance
 // Reader function: Customers checking balance
 void *reader(void *arg)
 {
-    int id = *((int *)arg);
+    int id = *((int *)arg); // Reader ID
     printf("Customer %d checked balance: $%d\n", id, accountBalance);
     sleep(1);
     return NULL;
@@ -18,7 +21,7 @@ void *reader(void *arg)
 // Writer function: Customers making deposits or withdrawals
 void *writer(void *arg)
 {
-    int id = *((int *)arg);
+    int id = *((int *)arg); // Writer ID
     int temp = accountBalance;
     temp += 100; // Simulate deposit
     sleep(1);    // Intentional delay to increase chance of race condition
@@ -27,6 +30,7 @@ void *writer(void *arg)
     return NULL;
 }
 
+// Entry point of the program
 int main()
 {
     pthread_t readers[MAX_READERS], writers[2];

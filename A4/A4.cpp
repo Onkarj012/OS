@@ -1,3 +1,6 @@
+// This program simulates a banking application using reader-writer problem.
+// Multiple customers can check their balance simultaneously, but deposits must be exclusive.
+
 #include <stdio.h>
 #include <pthread.h>
 #include <semaphore.h>
@@ -6,15 +9,15 @@
 
 #define MAX_READERS 5
 
-pthread_mutex_t mutex;
-sem_t *writeLock;          // Named semaphore
+pthread_mutex_t mutex;     // Mutex for synchronizing reader access
+sem_t *writeLock;          // Named semaphore for writer access
 int accountBalance = 1000; // Initial bank balance
-int totalReaders = 0;
+int totalReaders = 0;      // Count of active readers
 
 // Reader function: Customers checking balance
 void *reader(void *arg)
 {
-    int id = *((int *)arg);
+    int id = *((int *)arg); // Reader ID
     pthread_mutex_lock(&mutex);
     totalReaders++;
     if (totalReaders == 1)
@@ -40,15 +43,16 @@ void *reader(void *arg)
 // Writer function: Customers making deposits or withdrawals
 void *writer(void *arg)
 {
-    int id = *((int *)arg);
-    sem_wait(writeLock);
-    accountBalance += 100; // Simulating a deposit
+    int id = *((int *)arg); // Writer ID
+    sem_wait(writeLock);    // Lock for exclusive access
+    accountBalance += 100;  // Simulating a deposit
     printf("Customer %d deposited $100. New balance: $%d\n", id, accountBalance);
     sleep(1);
-    sem_post(writeLock);
+    sem_post(writeLock); // Release lock
     return NULL;
 }
 
+// Entry point of the program
 int main()
 {
     pthread_t readers[MAX_READERS], writers[2];
