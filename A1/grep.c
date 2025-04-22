@@ -68,7 +68,7 @@ void grepOption(char *pattern, char *file, char *option)
     if (found == 1)
     {
         printf("%s Found\n", pattern);
-        printf("In %d lines\n", count);
+        printf("In %d places\n", count);
     }
     else
         printf("%s Not Found\n", pattern);
@@ -88,7 +88,7 @@ int main(int argc, char *argv[])
     }
 
     // Check if the '-c' option is used
-    if (strcmp(argv[2], "-c") == 0)
+    if (strcmp(argv[1], "-c") == 0)
     {
         char *option = argv[1];
         char *pattern = argv[2];

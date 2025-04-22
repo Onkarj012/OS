@@ -3,14 +3,16 @@
 
 #include <iostream>
 #include <stdexcept>
+#include <vector>
 using namespace std;
 
 // Function to input data for allocation, max, and available resources
-void inputData(int processes, int resources, int allocation[][10], int max[][10], int available[])
+void inputData(int processes, int resources, vector<vector<int>> &allocation, vector<vector<int>> &max, vector<int> &available)
 {
     try
     {
         cout << "Enter allocation matrix:\n";
+        allocation.resize(processes, vector<int>(resources));
         for (int i = 0; i < processes; i++)
             for (int j = 0; j < resources; j++)
             {
@@ -19,6 +21,7 @@ void inputData(int processes, int resources, int allocation[][10], int max[][10]
             }
 
         cout << "Enter max matrix:\n";
+        max.resize(processes, vector<int>(resources));
         for (int i = 0; i < processes; i++)
             for (int j = 0; j < resources; j++)
             {
@@ -27,6 +30,7 @@ void inputData(int processes, int resources, int allocation[][10], int max[][10]
             }
 
         cout << "Enter available resources:\n";
+        available.resize(resources);
         for (int i = 0; i < resources; i++)
         {
             if (!(cin >> available[i]))
@@ -41,24 +45,23 @@ void inputData(int processes, int resources, int allocation[][10], int max[][10]
 }
 
 // Function to calculate the need matrix
-void calculateNeedMatrix(int processes, int resources, int max[][10], int allocation[][10], int need[][10])
+void calculateNeedMatrix(int processes, int resources, const vector<vector<int>> &max, const vector<vector<int>> &allocation, vector<vector<int>> &need)
 {
+    need.resize(processes, vector<int>(resources));
     for (int i = 0; i < processes; i++)
         for (int j = 0; j < resources; j++)
             need[i][j] = max[i][j] - allocation[i][j];
 }
 
 // Function to check if the system is in a safe state
-bool isSafeState(int processes, int resources, int allocation[][10], int need[][10], int available[])
+bool isSafeState(int processes, int resources, const vector<vector<int>> &allocation, const vector<vector<int>> &need, vector<int> &available)
 {
     try
     {
-        bool finish[processes]; // Track if process is finished
-        for (int i = 0; i < processes; i++)
-            finish[i] = false;
-        int ava[10], safeSequence[processes], count = 0;
-        for (int i = 0; i < resources; i++)
-            ava[i] = available[i];
+        vector<bool> finish(processes, false);
+        vector<int> ava = available;
+        vector<int> safeSequence(processes);
+        int count = 0;
 
         while (count < processes)
         {
@@ -113,7 +116,8 @@ int main()
     if (!(cin >> resources) || resources <= 0)
         throw runtime_error("Invalid number of resources!");
 
-    int allocation[10][10], max[10][10], need[10][10], available[10];
+    vector<vector<int>> allocation, max, need;
+    vector<int> available;
     inputData(processes, resources, allocation, max, available);
 
     calculateNeedMatrix(processes, resources, max, allocation, need);
