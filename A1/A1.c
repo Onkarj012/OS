@@ -1,6 +1,3 @@
-// This program simulates basic Linux commands using a menu-driven interface.
-// It uses fork to create a child process to handle the menu operations.
-
 #include <stdio.h>
 #include <sys/types.h>
 #include <sys/wait.h>
@@ -19,9 +16,11 @@ void runApp()
         printf("------------------------------------\n");
         printf(" 1. Simulate cp\n");
         printf(" 2. Simulate grep\n");
-        printf(" 3. Use Linux command cp\n");
-        printf(" 4. Use Linux command grep\n");
-        printf(" 5. Exit\n");
+        printf(" 3. Simulate ls\n");
+        printf(" 4. Use Linux command cp\n");
+        printf(" 5. Use Linux command grep\n");
+        printf(" 6. Use Linux command ls\n");
+        printf(" 7. Exit\n");
         printf("------------------------------------\n");
         printf(" Enter your choice: ");
         scanf("%d", &op);
@@ -35,8 +34,8 @@ void runApp()
             scanf("%s", source);
             printf("Enter destination file: ");
             scanf("%s", destination);
-            // Execute custom copy command
             execlp("./copyCommand", "./copyCommand", source, destination, NULL);
+            perror("Error executing cp");
             break;
         }
         case 2:
@@ -46,22 +45,31 @@ void runApp()
             scanf("%s", pattern);
             printf("Enter filename: ");
             scanf("%s", filename);
-            // Execute custom grep command
             execlp("./grepCommand", "./grepCommand", pattern, filename, NULL);
+            perror("Error executing grep");
             break;
         }
         case 3:
+        {
+            char dir_path[256];
+            printf("\nEnter directory path (or press Enter for current directory): ");
+            scanf("%s", dir_path);
+            execlp("./lsCommand", "./lsCommand", dir_path, NULL);
+            perror("Error executing ls");
+            break;
+        }
+        case 4:
         {
             char source[256], destination[256];
             printf("\nEnter source file: ");
             scanf("%s", source);
             printf("Enter destination file: ");
             scanf("%s", destination);
-            // Execute Linux cp command
             execlp("cp", "cp", source, destination, NULL);
+            perror("Error executing Linux cp");
             break;
         }
-        case 4:
+        case 5:
         {
             char pattern[256], filename[256];
             printf("\nEnter pattern to search: ");
@@ -69,12 +77,21 @@ void runApp()
             printf("Enter filename: ");
             scanf("%s", filename);
             printf("\n");
-            // Execute Linux grep command
             execlp("grep", "grep", pattern, filename, NULL);
+            perror("Error executing Linux grep");
             break;
         }
-        case 5:
-            exit(0); // Exit the program
+        case 6:
+        {
+            char dir_path[256];
+            printf("\nEnter directory path (or press Enter for current directory): ");
+            scanf("%s", dir_path);
+            execlp("ls", "ls", dir_path, NULL);
+            perror("Error executing Linux ls");
+            break;
+        }
+        case 7:
+            exit(0);
         default:
             printf("\nInvalid choice. Please try again.\n");
             break;
