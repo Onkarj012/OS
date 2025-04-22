@@ -2,6 +2,11 @@
   "C_Cpp.errorSquiggles": "disabled",
   "files.associations": {
     "array": "cpp",
-    "string_view": "cpp"
+    "string_view": "cpp",
+    "vector": "cpp",
+    "fcntl.h": "c",
+    "stdexcept": "cpp",
+    "iostream": "cpp",
+    "unordered_set": "cpp"
   }
 }
